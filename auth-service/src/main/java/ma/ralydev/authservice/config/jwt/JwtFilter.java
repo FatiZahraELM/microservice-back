@@ -19,13 +19,21 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtService jwtService;
-    @Autowired private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
 
+        // Skip filter for auth endpoints
+        String path = request.getServletPath();
+        if (path.equals("/api/auth/login") || path.equals("/api/auth/register")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;

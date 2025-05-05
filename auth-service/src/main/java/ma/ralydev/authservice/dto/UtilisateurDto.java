@@ -1,20 +1,11 @@
-package ma.ralydev.authservice.entite;
+package ma.ralydev.authservice.dto;
 
-import jakarta.persistence.*;
-
-@Entity
-public class Utilisateur {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UtilisateurDto {
     private Long id;
     private String nom;
     private String username;
     private String email;
-    private String password;
-
-
-    @ManyToOne
-    private Role role;
+    private Long roleId; // ID du rôle
 
     public Long getId() {
         return id;
@@ -48,20 +39,11 @@ public class Utilisateur {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
 }

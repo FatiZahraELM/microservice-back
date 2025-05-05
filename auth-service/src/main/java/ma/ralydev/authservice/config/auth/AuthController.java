@@ -14,7 +14,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin("http://localhost:5173")
 public class AuthController {
 
     private final UtilisateurRepository utilisateurRepository;
@@ -42,6 +41,7 @@ public class AuthController {
                 .orElseThrow(() -> new UsernameNotFoundException("Utilisateur introuvable"));
 
         return ResponseEntity.ok(Map.of(
+                "id", user.getId(),
                 "username", user.getUsername(),
                 "nom", user.getNom(),
                 "email", user.getEmail(),

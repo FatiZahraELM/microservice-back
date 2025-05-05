@@ -2,7 +2,7 @@ package ma.ralydev.authservice.config.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import ma.ralydev.authservice.enums.Role;
+import ma.ralydev.authservice.entite.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class JwtService {
     public String generateToken(UserDetails userDetails, Role role) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
-                .claim("role", role.name()) // on ajoute le rôle ici
+                .claim("role", role.getNom()) // on ajoute le rôle ici
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.DAYS)))
                 .signWith(SignatureAlgorithm.HS256, secret)

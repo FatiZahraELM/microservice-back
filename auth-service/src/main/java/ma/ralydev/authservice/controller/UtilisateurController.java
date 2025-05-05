@@ -1,11 +1,10 @@
 package ma.ralydev.authservice.controller;
 
-import ma.ralydev.authservice.entite.Utilisateur;
-import ma.ralydev.authservice.enums.Role;
-import ma.ralydev.authservice.repository.UtilisateurRepository;
+import ma.ralydev.authservice.dto.UtilisateurDto;
+import ma.ralydev.authservice.service.UtilisateurService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,70 +12,69 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth/utilisateurs")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
-@PreAuthorize("hasRole('ADMIN')") // Sécurisé uniquement pour l'admin
 public class UtilisateurController {
 
-    private final UtilisateurRepository repository;
-    private final PasswordEncoder passwordEncoder;
-    public UtilisateurController(UtilisateurRepository repository, PasswordEncoder passwordEncoder) {
-        this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
+    private final UtilisateurService utilisateurService;
+
+    public UtilisateurController(UtilisateurService utilisateurService) {
+        this.utilisateurService = utilisateurService;
     }
 
     @GetMapping
-    public List<Utilisateur> getAll() {
-        return repository.findAll();
+    @PreAuthorize("hasRole('ADMIN')") // Sécurisé uniquement pour l'admin
+    public List<UtilisateurDto> getAll() {
+        return utilisateurService.getAllUtilisateur();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UtilisateurDto> getUtilisateurById(@PathVariable Long id) {
+        UtilisateurDto utilisateurDto = utilisateurService.getUtilisateurById(id);
+        return new ResponseEntity<>(utilisateurDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<UtilisateurDto> getUtilisateurByEmail(@PathVariable String email) {
+        UtilisateurDto utilisateurDto = utilisateurService.getUtilisateurByEmail(email);
+        return new ResponseEntity<>(utilisateurDto, HttpStatus.OK);
     }
 
     @PostMapping
-    public Utilisateur create(@RequestBody Utilisateur utilisateur) {
-        String rawPassword = utilisateur.getUsername(); // password = username
-        utilisateur.setPassword(passwordEncoder.encode(rawPassword));
-        return repository.save(utilisateur);
+    @PreAuthorize("hasRole('ADMIN')") // Sécurisé uniquement pour l'admin
+    public UtilisateurDto create(@RequestBody UtilisateurDto utilisateurDto) {
+        return utilisateurService.addUtilisateur(utilisateurDto);
     }
 
-    // Méthode pour modifier uniquement le rôle
     @PutMapping("/{id}/role")
-    public ResponseEntity<Utilisateur> updateRole(
+    @PreAuthorize("hasRole('ADMIN')") // Sécurisé uniquement pour l'admin
+    public ResponseEntity<UtilisateurDto> updateRole(
             @PathVariable Long id,
             @RequestBody Map<String, String> request) {
-
-        return repository.findById(id)
-                .map(user -> {
-                    String newRole = request.get("role");
-                    if (newRole != null) {
-                        user.setRole(Role.valueOf(newRole));
-                    }
-                    return ResponseEntity.ok(repository.save(user));
-                })
-                .orElse(ResponseEntity.notFound().build());
+        String newRoleId = request.get("roleId");
+        UtilisateurDto updated = utilisateurService.updateRole(id, newRoleId);
+        return ResponseEntity.ok(updated);
     }
 
-    // Méthode pour les autres modifications
     @PutMapping("/{id}")
-    public ResponseEntity<Utilisateur> updateUser(
+    public ResponseEntity<UtilisateurDto> updateUser(
             @PathVariable Long id,
-            @RequestBody Utilisateur userDetails) {
-
-        return repository.findById(id)
-                .map(user -> {
-                    if (userDetails.getUsername() != null) {
-                        user.setUsername(userDetails.getUsername());
-                    }
-                    if (userDetails.getEmail() != null) {
-                        user.setEmail(userDetails.getEmail());
-                    }
-                    // Ajouter les autres champs si nécessaire
-                    return ResponseEntity.ok(repository.save(user));
-                })
-                .orElse(ResponseEntity.notFound().build());
+            @RequestBody UtilisateurDto userDetails) {
+        UtilisateurDto updated = utilisateurService.updateUtilisateur(id, userDetails);
+        return ResponseEntity.ok(updated);
     }
 
+    @PutMapping("/{id}/password")
+    public ResponseEntity<?> updatePassword(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> request) {
+        String newPassword = request.get("password");
+        utilisateurService.updatePassword(id, newPassword);
+        return ResponseEntity.ok().build();
+    }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        repository.deleteById(id);
+    @PreAuthorize("hasRole('ADMIN')") // Sécurisé uniquement pour l'admin
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        utilisateurService.deleteUtilisateur(id);
         return ResponseEntity.ok().build();
     }
 }
