@@ -10,16 +10,26 @@
         <module name="api-gateway" />
         <module name="eureka-server" />
       </profile>
-      <profile name="Annotation profile for production-service" enabled="true">
+      <profile name="Annotation profile for stock-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
-        <module name="production-service" />
+        <module name="stock-service" />
         <module name="auth-service" />
         <module name="crm-service" />
+      </profile>
+      <profile name="Annotation profile for production-service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
+        </processorPath>
+        <module name="production-service" />
       </profile>
     </annotationProcessing>
   </component>
@@ -30,6 +40,7 @@
       <module name="crm-service" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
       <module name="production-service" options="-parameters" />
+      <module name="stock-service" options="-parameters" />
     </option>
   </component>
 </project>

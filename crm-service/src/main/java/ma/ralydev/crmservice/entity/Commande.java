@@ -1,9 +1,17 @@
 package ma.ralydev.crmservice.entity;
 
+
+
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Date;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 public class Commande {
     @Id
@@ -12,8 +20,19 @@ public class Commande {
     private String reference;
     private Date dateCommande;
     private double quantite;
+    @OneToOne
+    private DetailsCommande detailsCommande;
     @ManyToOne
     private Client client;
+    private Long idEtiquette;
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
 
     public Date getDateCommande() {
         return dateCommande;
@@ -21,6 +40,14 @@ public class Commande {
 
     public void setDateCommande(Date dateCommande) {
         this.dateCommande = dateCommande;
+    }
+
+    public DetailsCommande getDetailsCommande() {
+        return detailsCommande;
+    }
+
+    public void setDetailsCommande(DetailsCommande detailsCommande) {
+        this.detailsCommande = detailsCommande;
     }
 
     public Long getId() {
@@ -31,12 +58,12 @@ public class Commande {
         this.id = id;
     }
 
-    public String getReference() {
-        return reference;
+    public Long getIdEtiquette() {
+        return idEtiquette;
     }
 
-    public void setReference(String reference) {
-        this.reference = reference;
+    public void setIdEtiquette(Long idEtiquette) {
+        this.idEtiquette = idEtiquette;
     }
 
     public double getQuantite() {
@@ -47,11 +74,11 @@ public class Commande {
         this.quantite = quantite;
     }
 
-    public Client getClient() {
-        return client;
+    public String getReference() {
+        return reference;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 }

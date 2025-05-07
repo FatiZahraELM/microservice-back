@@ -16,17 +16,19 @@ import java.util.stream.Collectors;
 public class DevisServiceImpl implements DevisService {
     private final DevisRepository devisRepository;
     private final CrmClient crmClient;
+    private final DevisMapper devisMapper;
 
-    public DevisServiceImpl(DevisRepository devisRepository, CrmClient crmClient) {
+    public DevisServiceImpl(DevisRepository devisRepository, CrmClient crmClient, DevisMapper devisMapper) {
         this.devisRepository = devisRepository;
         this.crmClient = crmClient;
+        this.devisMapper = devisMapper;
     }
 
     @Override
     public List<DevisDto> getDevis() {
         List<Devis> devisList = devisRepository.findAll();
         return devisList.stream().map(devis -> {
-            DevisDto dto = DevisMapper.toDevisDto(devis);
+            DevisDto dto = devisMapper.toDto(devis);
             try {
                 ResponseEntity<CommandeDTO> response = crmClient.getCommandeById(devis.getCommandeId());
                 if (response.getStatusCode().is2xxSuccessful()) {
@@ -43,7 +45,7 @@ public class DevisServiceImpl implements DevisService {
     public DevisDto getDevisById(Long id) {
         Devis devis = devisRepository.findById(id).orElse(null);
         assert devis != null;
-        DevisDto devisDto = DevisMapper.toDevisDto(devis);
+        DevisDto devisDto = devisMapper.toDto(devis);
 
         // Injection de la commande
         ResponseEntity<CommandeDTO> response = crmClient.getCommandeById(devis.getCommandeId());
@@ -67,9 +69,9 @@ public class DevisServiceImpl implements DevisService {
             System.out.println("Commande trouvée : " + commande.getReference() + " client: " + commande.getClient());
 
             // Mapper et sauvegarder le devis
-            Devis devis = DevisMapper.toDevis(devisDto);
+            Devis devis = devisMapper.toEntity(devisDto);
             Devis savedDevis = devisRepository.save(devis);
-            DevisDto dto = DevisMapper.toDevisDto(savedDevis);
+            DevisDto dto = devisMapper.toDto(savedDevis);
             dto.setCommandeDTO(commande);
             return dto;
         } else {
@@ -90,13 +92,13 @@ public class DevisServiceImpl implements DevisService {
         }
 
         // Mapper depuis le DTO mis à jour
-        Devis updatedDevis = DevisMapper.toDevis(devisDto);
+        Devis updatedDevis = devisMapper.toEntity(devisDto);
         updatedDevis.setId(id); // Important : conserve l'ID
 
         Devis saved = devisRepository.save(updatedDevis);
 
         // Mapper retour et injecter CommandeDTO
-        DevisDto dto = DevisMapper.toDevisDto(saved);
+        DevisDto dto = devisMapper.toDto(saved);
         dto.setCommandeDTO(response.getBody());
         return dto;
     }
