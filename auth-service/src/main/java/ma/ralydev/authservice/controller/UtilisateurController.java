@@ -1,5 +1,6 @@
 package ma.ralydev.authservice.controller;
 
+import jakarta.validation.constraints.NotBlank;
 import ma.ralydev.authservice.dto.UtilisateurDto;
 import ma.ralydev.authservice.service.UtilisateurService;
 import org.springframework.http.HttpStatus;
@@ -65,10 +66,29 @@ public class UtilisateurController {
     @PutMapping("/{id}/password")
     public ResponseEntity<?> updatePassword(
             @PathVariable Long id,
-            @RequestBody Map<String, String> request) {
-        String newPassword = request.get("password");
-        utilisateurService.updatePassword(id, newPassword);
-        return ResponseEntity.ok().build();
+            @RequestBody PasswordUpdateRequest request) {
+
+        // 2. Valider la requête
+        if ( request.newPassword() == null) {
+            return ResponseEntity.badRequest().body("Les mots de passe sont requis");
+        }
+
+        // 3. Mettre à jour le mot de passe
+        try {
+            utilisateurService.updatePassword(
+                    id,
+                    request.newPassword()
+            );
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    // DTO record
+    public record PasswordUpdateRequest(
+            @NotBlank String newPassword
+    ) {
     }
 
     @DeleteMapping("/{id}")

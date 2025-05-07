@@ -1,5 +1,6 @@
 package ma.ralydev.authservice.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import ma.ralydev.authservice.dto.UtilisateurDto;
 import ma.ralydev.authservice.entite.Role;
 import ma.ralydev.authservice.entite.Utilisateur;
@@ -86,11 +87,16 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
-    public void updatePassword(Long id, String newPassword) {
-        Utilisateur utilisateur = utilisateurRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
-        utilisateur.setPassword(passwordEncoder.encode(newPassword));
-        utilisateurRepository.save(utilisateur);
+    public void updatePassword(Long userId, String newPassword) {
+        Utilisateur user = utilisateurRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé"));
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        // Vérifier l'ancien mot de passe
+        if (encodedPassword.equals(user.getPassword())) {
+            throw new RuntimeException("Mot de passe actuel incorrect");
+        }
+        // Mettre à jour le mot de passe
+        user.setPassword(passwordEncoder.encode(newPassword));
+        utilisateurRepository.save(user);
     }
-
 }
