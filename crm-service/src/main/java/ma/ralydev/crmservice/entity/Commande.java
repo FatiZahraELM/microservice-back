@@ -26,6 +26,17 @@ public class Commande {
     private Client client;
     private Long idEtiquette;
 
+    @Enumerated(EnumType.STRING)
+    private StatutCommande statut;
+
+    public StatutCommande getStatut() {
+        return statut;
+    }
+
+    public void setStatut(StatutCommande statut) {
+        this.statut = statut;
+    }
+
     public Client getClient() {
         return client;
     }

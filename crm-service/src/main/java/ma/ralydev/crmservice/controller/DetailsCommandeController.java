@@ -1,66 +1,70 @@
 package ma.ralydev.crmservice.controller;
 
+import ma.ralydev.crmservice.dto.DetailsCommandeDTO;
 import ma.ralydev.crmservice.entity.DetailsCommande;
+import ma.ralydev.crmservice.repository.DetailsCommandeRepository;
 import ma.ralydev.crmservice.service.DetailsCommandeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/details-commandes")
+@RequestMapping("/api/crm/details-commandes")
 public class DetailsCommandeController {
 
     private final DetailsCommandeService detailsCommandeService;
+    private final DetailsCommandeRepository detailsCommandeRepository;
 
-    @Autowired
-    public DetailsCommandeController(DetailsCommandeService detailsCommandeService) {
+    public DetailsCommandeController(DetailsCommandeService detailsCommandeService, DetailsCommandeRepository detailsCommandeRepository) {
         this.detailsCommandeService = detailsCommandeService;
+        this.detailsCommandeRepository = detailsCommandeRepository;
     }
 
-    // Récupérer tous les détails de commandes
     @GetMapping
-    public ResponseEntity<List<DetailsCommande>> getAllDetailsCommandes() {
-        List<DetailsCommande> detailsCommandes = detailsCommandeService.getAllDetailsCommandes();
+    public ResponseEntity<List<DetailsCommandeDTO>> getAllDetailsCommandes() {
+        List<DetailsCommandeDTO> detailsCommandes = detailsCommandeService.getAllDetailsCommandes();
         return new ResponseEntity<>(detailsCommandes, HttpStatus.OK);
     }
 
-    // Récupérer un détail de commande par son ID
     @GetMapping("/{id}")
-    public ResponseEntity<DetailsCommande> getDetailsCommandeById(@PathVariable Long id) {
-        try {
-            DetailsCommande detailsCommande = detailsCommandeService.getDetailsCommandeById(id);
-            return new ResponseEntity<>(detailsCommande, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<DetailsCommandeDTO> getDetailsCommandeById(@PathVariable Long id) {
+        DetailsCommandeDTO detailsCommande = detailsCommandeService.getDetailsCommandeById(id);
+        return new ResponseEntity<>(detailsCommande, HttpStatus.OK);
     }
 
-    // Créer un nouveau détail de commande
     @PostMapping
-    public ResponseEntity<DetailsCommande> createDetailsCommande(@RequestBody DetailsCommande detailsCommande) {
-        detailsCommandeService.saveDetailsCommande(detailsCommande);  // Corrected to call saveDetailsCommande
-        DetailsCommande savedDetailsCommande = detailsCommandeService.saveDetailsCommande(detailsCommande);
-        return new ResponseEntity<>(savedDetailsCommande, HttpStatus.CREATED);
+    public ResponseEntity<DetailsCommandeDTO> createDetailsCommande(
+             @RequestBody DetailsCommandeDTO detailsCommandeDTO) {
+        DetailsCommandeDTO savedDetails = detailsCommandeService.saveDetailsCommande(detailsCommandeDTO);
+        return new ResponseEntity<>(savedDetails, HttpStatus.CREATED);
     }
 
-    // Mettre à jour un détail de commande existant
     @PutMapping("/{id}")
-    public ResponseEntity<DetailsCommande> updateDetailsCommande(@PathVariable Long id, @RequestBody DetailsCommande detailsCommande) {
-        try {
-            DetailsCommande updatedDetailsCommande = detailsCommandeService.updateDetailsCommande(id, detailsCommande);
-            return new ResponseEntity<>(updatedDetailsCommande, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<DetailsCommandeDTO> updateDetailsCommande(
+            @PathVariable Long id,
+            @RequestBody DetailsCommandeDTO detailsCommandeDTO) {
+        DetailsCommandeDTO updatedDetails = detailsCommandeService.updateDetailsCommande(id, detailsCommandeDTO);
+        return new ResponseEntity<>(updatedDetails, HttpStatus.OK);
     }
 
-    // Supprimer un détail de commande
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDetailsCommande(@PathVariable Long id) {
         detailsCommandeService.deleteDetailsCommande(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/audio/{id}")
+    public ResponseEntity<byte[]> getAudio(@PathVariable Long id) {
+        DetailsCommande details = detailsCommandeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Détails non trouvés"));
+
+         return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline")
+                .body(details.getEnregistrementAudio());
     }
 }

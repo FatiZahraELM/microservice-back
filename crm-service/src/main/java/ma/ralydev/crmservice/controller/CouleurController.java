@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/couleurs")
+@RequestMapping("/api/crm/couleurs")
 public class CouleurController {
 
     private final CouleurService couleurService;

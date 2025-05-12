@@ -10,5 +10,9 @@ public interface CouleurService {
     Couleur getCouleurById(Long id);
     Couleur saveCouleur(Couleur couleur);
     Couleur updateCouleur(Long id, Couleur couleur);
+
+    // Nouvelle méthode pour récupérer plusieurs couleurs en batch
+    List<Couleur> getCouleursByIds(List<Long> ids);
+
     void deleteCouleur(Long id);
 }
