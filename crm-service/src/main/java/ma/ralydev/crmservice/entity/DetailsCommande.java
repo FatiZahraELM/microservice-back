@@ -21,20 +21,33 @@ public class DetailsCommande {
     private boolean vernis;
     private boolean dorure;
     private boolean plastification;
-
     private int mandrin;
+    @Enumerated(EnumType.STRING)
     private PoseEtq poseEtq;
+    @Enumerated(EnumType.STRING)
     private SensSortie sensSortie;
+    @Enumerated(EnumType.STRING)
     private ChoixN choixN;
 
     private boolean impression;
+    @Enumerated(EnumType.STRING)
     private TypeImpression typeImpression;
     private Integer nbCouleursRecto;
     private Integer nbCouleursVerso;
-    @ManyToOne
-    private Couleur couleursRecto;
-    @ManyToOne
-    private Couleur couleursVerso;
+    @ManyToMany
+    @JoinTable(
+            name = "details_commande_couleurs_recto",
+            joinColumns = @JoinColumn(name = "details_commande_id"),
+            inverseJoinColumns = @JoinColumn(name = "couleur_id")
+    )
+    private List<Couleur> couleursRecto;
+    @ManyToMany
+    @JoinTable(
+            name = "details_commande_couleurs_verso",
+            joinColumns = @JoinColumn(name = "details_commande_id"),
+            inverseJoinColumns = @JoinColumn(name = "couleur_id")
+    )
+    private List<Couleur> couleursVerso;
 
     private Long formeDecoupeId;
     private boolean formeDecoupeACommander;
@@ -42,7 +55,10 @@ public class DetailsCommande {
     @ElementCollection
     private List<Long> clicheIds;
     private boolean clicheACommander;
-
+    @Lob
+    @Column(name = "enregistrement_audio", columnDefinition = "LONGBLOB")
+    private byte[] enregistrementAudio;
+    private String commentaire;
     public ChoixN getChoixN() {
         return choixN;
     }
@@ -67,19 +83,19 @@ public class DetailsCommande {
         this.clicheIds = clicheIds;
     }
 
-    public Couleur getCouleursRecto() {
+    public List<Couleur> getCouleursRecto() {
         return couleursRecto;
     }
 
-    public void setCouleursRecto(Couleur couleursRecto) {
+    public void setCouleursRecto(List<Couleur> couleursRecto) {
         this.couleursRecto = couleursRecto;
     }
 
-    public Couleur getCouleursVerso() {
+    public List<Couleur> getCouleursVerso() {
         return couleursVerso;
     }
 
-    public void setCouleursVerso(Couleur couleursVerso) {
+    public void setCouleursVerso(List<Couleur> couleursVerso) {
         this.couleursVerso = couleursVerso;
     }
 
@@ -209,5 +225,22 @@ public class DetailsCommande {
 
     public void setVernis(boolean vernis) {
         this.vernis = vernis;
+    }
+
+
+    public byte[] getEnregistrementAudio() {
+        return enregistrementAudio;
+    }
+
+    public void setEnregistrementAudio(byte[] enregistrementAudio) {
+        this.enregistrementAudio = enregistrementAudio;
+    }
+
+    public String getCommentaire() {
+        return commentaire;
+    }
+
+    public void setCommentaire(String commentaire) {
+        this.commentaire = commentaire;
     }
 }
