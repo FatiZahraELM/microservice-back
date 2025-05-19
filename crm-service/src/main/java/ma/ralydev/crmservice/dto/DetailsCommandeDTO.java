@@ -1,6 +1,5 @@
 package ma.ralydev.crmservice.dto;
 
-import ma.ralydev.crmservice.entity.Couleur;
 
 import java.util.List;
 
@@ -28,7 +27,32 @@ public class DetailsCommandeDTO {
     private boolean clicheACommander;
     private String enregistrementAudio;
     private String commentaire;
+    private String file_name;
+    private double espaceLaize;
+    private  double espaceDeveloppe;
+    private int nbPosesLaize;
+    private  int nbPosesDeveloppe;
+    private int cylindreZ;
+
+
+
     // Getters & Setters
+
+    public String getFile_name() {
+        return file_name;
+    }
+
+    public void setFile_name(String file_name) {
+        this.file_name = file_name;
+    }
+
+    public int getCylindreZ() {
+        return cylindreZ;
+    }
+
+    public void setCylindreZ(int cylindreZ) {
+        this.cylindreZ = cylindreZ;
+    }
 
     public Long getId() {
         return id;
@@ -212,5 +236,37 @@ public class DetailsCommandeDTO {
 
     public void setEnregistrementAudio(String enregistrementAudio) {
         this.enregistrementAudio = enregistrementAudio;
+    }
+
+    public double getEspaceLaize() {
+        return espaceLaize;
+    }
+
+    public void setEspaceLaize(double espaceLaize) {
+        this.espaceLaize = espaceLaize;
+    }
+
+    public double getEspaceDeveloppe() {
+        return espaceDeveloppe;
+    }
+
+    public void setEspaceDeveloppe(double espaceDeveloppe) {
+        this.espaceDeveloppe = espaceDeveloppe;
+    }
+
+    public int getNbPosesLaize() {
+        return nbPosesLaize;
+    }
+
+    public void setNbPosesLaize(int nbPosesLaize) {
+        this.nbPosesLaize = nbPosesLaize;
+    }
+
+    public int getNbPosesDeveloppe() {
+        return nbPosesDeveloppe;
+    }
+
+    public void setNbPosesDeveloppe(int nbPosesDeveloppe) {
+        this.nbPosesDeveloppe = nbPosesDeveloppe;
     }
 }

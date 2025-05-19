@@ -25,9 +25,27 @@ public class Commande {
     @ManyToOne
     private Client client;
     private Long idEtiquette;
+    private String nomEtiquette;
+    private Long idPapier;
 
     @Enumerated(EnumType.STRING)
     private StatutCommande statut;
+
+    public String getNomEtiquette() {
+        return nomEtiquette;
+    }
+
+    public void setNomEtiquette(String nomEtiquette) {
+        this.nomEtiquette = nomEtiquette;
+    }
+
+    public Long getIdPapier() {
+        return idPapier;
+    }
+
+    public void setIdPapier(Long idPapier) {
+        this.idPapier = idPapier;
+    }
 
     public StatutCommande getStatut() {
         return statut;
