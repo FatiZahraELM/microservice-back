@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/historique-cliches")
+@RequestMapping("/api/stock/historique-cliches")
 public class HistoriqueClicheController {
 
     private final HistoriqueClicheService historiqueClicheService;

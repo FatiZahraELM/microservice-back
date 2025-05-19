@@ -1,6 +1,7 @@
 package ma.ralydev.crmservice.service;
 
 import ma.ralydev.crmservice.dto.DetailsCommandeDTO;
+import ma.ralydev.crmservice.entity.Couleur;
 import ma.ralydev.crmservice.entity.DetailsCommande;
 import ma.ralydev.crmservice.mapper.DetailsCommandeMapper;
 import ma.ralydev.crmservice.repository.DetailsCommandeRepository;
@@ -19,13 +20,15 @@ public class DetailsCommandeServiceImpl implements DetailsCommandeService {
     private final DetailsCommandeValidator validator;
     private final DetailsCommandeRepository detailsCommandeRepository;
     private final DetailsCommandeMapper detailsCommandeMapper;
+    private final CouleurService couleurService;
 
     public DetailsCommandeServiceImpl(DetailsCommandeValidator validator,
                                       DetailsCommandeRepository detailsCommandeRepository,
-                                      DetailsCommandeMapper detailsCommandeMapper) {
+                                      DetailsCommandeMapper detailsCommandeMapper, CouleurService couleurService) {
         this.validator = validator;
         this.detailsCommandeRepository = detailsCommandeRepository;
         this.detailsCommandeMapper = detailsCommandeMapper;
+        this.couleurService = couleurService;
     }
 
     public void saveDetailsCommande(DetailsCommande detailsCommande) {
@@ -73,9 +76,16 @@ public class DetailsCommandeServiceImpl implements DetailsCommandeService {
 
     @Override
     public void deleteDetailsCommande(Long id) {
-        if (!detailsCommandeRepository.existsById(id)) {
-            throw new RuntimeException("DetailsCommande not found with id: " + id);
+        DetailsCommande detailsCommande = detailsCommandeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("DetailsCommande not found with id: " + id));
+
+        for (Couleur couleur : detailsCommande.getCouleursRecto()) {
+            couleurService.deleteCouleur(couleur.getId());
+        }
+        for (Couleur couleur : detailsCommande.getCouleursVerso()) {
+            couleurService.deleteCouleur(couleur.getId());
         }
         detailsCommandeRepository.deleteById(id);
     }
+
 }

@@ -14,8 +14,26 @@ public class CommandeDTO {
     private Date dateCommande;
     private DetailsCommandeDTO detailsCommande; // Ajout du DTO des détails
     private StatutCommande statut;
+    private String nomEtiquette;
+    private Long idPapier;
 
     // Getters & Setters
+
+    public Long getIdPapier() {
+        return idPapier;
+    }
+
+    public void setIdPapier(Long idPapier) {
+        this.idPapier = idPapier;
+    }
+
+    public String getNomEtiquette() {
+        return nomEtiquette;
+    }
+
+    public void setNomEtiquette(String nomEtiquette) {
+        this.nomEtiquette = nomEtiquette;
+    }
 
     public StatutCommande getStatut() {
         return statut;

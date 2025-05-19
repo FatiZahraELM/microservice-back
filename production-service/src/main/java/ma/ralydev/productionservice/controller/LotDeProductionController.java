@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/lots")
+@RequestMapping("/api/production/lots")
 public class LotDeProductionController {
 
     private final LotDeProductionService lotDeProductionService;

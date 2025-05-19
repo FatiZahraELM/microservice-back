@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/papiers")
+@RequestMapping("/api/stock/papiers")
 public class PapierController {
 
     private final PapierService papierService;

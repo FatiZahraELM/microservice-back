@@ -77,7 +77,12 @@ public class DetailsCommandeMapper {
         dto.setFormeDecoupeACommander(entity.isFormeDecoupeACommander());
         dto.setClicheIds(entity.getClicheIds());
         dto.setClicheACommander(entity.isClicheACommander());
-
+        dto.setFile_name(entity.getFile_name());
+        dto.setEspaceLaize(entity.getEspaceLaize());
+        dto.setEspaceDeveloppe(entity.getEspaceDeveloppe());
+        dto.setNbPosesLaize(entity.getNbPosesLaize());
+        dto.setNbPosesDeveloppe(entity.getNbPosesDeveloppe());
+        dto.setCylindreZ(entity.getCylindreZ());
         return dto;
     }
 
@@ -118,7 +123,11 @@ public class DetailsCommandeMapper {
         if (dto.getTypeImpression() != null) {
             entity.setTypeImpression(TypeImpression.valueOf(dto.getTypeImpression()));
         }
-
+        entity.setEspaceLaize(dto.getEspaceLaize());
+        entity.setEspaceDeveloppe(dto.getEspaceDeveloppe());
+        entity.setNbPosesLaize(dto.getNbPosesLaize());
+        entity.setNbPosesDeveloppe(dto.getNbPosesDeveloppe());
+        entity.setCylindreZ(dto.getCylindreZ());
         entity.setNbCouleursRecto(dto.getNbCouleursRecto());
         entity.setNbCouleursVerso(dto.getNbCouleursVerso());
 
@@ -137,6 +146,7 @@ public class DetailsCommandeMapper {
         entity.setFormeDecoupeACommander(dto.isFormeDecoupeACommander());
         entity.setClicheIds(dto.getClicheIds());
         entity.setClicheACommander(dto.isClicheACommander());
+        entity.setFile_name(dto.getFile_name());
 
         return entity;
     }
@@ -181,7 +191,11 @@ public class DetailsCommandeMapper {
         if (dto.getTypeImpression() != null) {
             entity.setTypeImpression(TypeImpression.valueOf(dto.getTypeImpression()));
         }
-
+        entity.setEspaceLaize(dto.getEspaceLaize());
+        entity.setEspaceDeveloppe(dto.getEspaceDeveloppe());
+        entity.setNbPosesLaize(dto.getNbPosesLaize());
+        entity.setNbPosesDeveloppe(dto.getNbPosesDeveloppe());
+        entity.setCylindreZ(dto.getCylindreZ());
         entity.setNbCouleursRecto(dto.getNbCouleursRecto());
         entity.setNbCouleursVerso(dto.getNbCouleursVerso());
 
@@ -207,5 +221,7 @@ public class DetailsCommandeMapper {
         // Update cliche fields
         entity.setClicheIds(dto.getClicheIds());
         entity.setClicheACommander(dto.isClicheACommander());
+
+        entity.setFile_name(dto.getFile_name());
     }
 }

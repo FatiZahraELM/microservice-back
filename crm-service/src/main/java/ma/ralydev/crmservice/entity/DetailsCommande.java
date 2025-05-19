@@ -28,7 +28,7 @@ public class DetailsCommande {
     private SensSortie sensSortie;
     @Enumerated(EnumType.STRING)
     private ChoixN choixN;
-
+    private String file_name;
     private boolean impression;
     @Enumerated(EnumType.STRING)
     private TypeImpression typeImpression;
@@ -59,6 +59,21 @@ public class DetailsCommande {
     @Column(name = "enregistrement_audio", columnDefinition = "LONGBLOB")
     private byte[] enregistrementAudio;
     private String commentaire;
+
+    private double espaceLaize;
+    private  double espaceDeveloppe;
+    private int nbPosesLaize;
+    private  int nbPosesDeveloppe;
+    private int cylindreZ;
+
+    public int getCylindreZ() {
+        return cylindreZ;
+    }
+
+    public void setCylindreZ(int cylindreZ) {
+        this.cylindreZ = cylindreZ;
+    }
+
     public ChoixN getChoixN() {
         return choixN;
     }
@@ -113,6 +128,46 @@ public class DetailsCommande {
 
     public void setFormeDecoupeACommander(boolean formeDecoupeACommander) {
         this.formeDecoupeACommander = formeDecoupeACommander;
+    }
+
+    public double getEspaceLaize() {
+        return espaceLaize;
+    }
+
+    public void setEspaceLaize(double espaceLaize) {
+        this.espaceLaize = espaceLaize;
+    }
+
+    public double getEspaceDeveloppe() {
+        return espaceDeveloppe;
+    }
+
+    public void setEspaceDeveloppe(double espaceDeveloppe) {
+        this.espaceDeveloppe = espaceDeveloppe;
+    }
+
+    public int getNbPosesLaize() {
+        return nbPosesLaize;
+    }
+
+    public void setNbPosesLaize(int nbPosesLaize) {
+        this.nbPosesLaize = nbPosesLaize;
+    }
+
+    public int getNbPosesDeveloppe() {
+        return nbPosesDeveloppe;
+    }
+
+    public void setNbPosesDeveloppe(int nbPosesDeveloppe) {
+        this.nbPosesDeveloppe = nbPosesDeveloppe;
+    }
+
+    public String getFile_name() {
+        return file_name;
+    }
+
+    public void setFile_name(String file_name) {
+        this.file_name = file_name;
     }
 
     public Long getFormeDecoupeId() {

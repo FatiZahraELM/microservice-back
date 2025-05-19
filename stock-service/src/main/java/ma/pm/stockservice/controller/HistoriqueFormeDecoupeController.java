@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/historique-forme-decoupes")
+@RequestMapping("/api/stock/historique-forme-decoupes")
 public class HistoriqueFormeDecoupeController {
 
     private final HistoriqueFormeDecoupeService historiqueFormeDecoupeService;

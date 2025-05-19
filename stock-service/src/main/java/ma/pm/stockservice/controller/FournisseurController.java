@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/fournisseurs")
+@RequestMapping("/api/stock/fournisseurs")
 public class FournisseurController {
 
     private final FournisseurService fournisseurService;

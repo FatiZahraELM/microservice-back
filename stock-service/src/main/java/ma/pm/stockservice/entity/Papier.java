@@ -15,7 +15,7 @@ import lombok.*;
 public class Papier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String designation;
 
     public String getDesignation() {

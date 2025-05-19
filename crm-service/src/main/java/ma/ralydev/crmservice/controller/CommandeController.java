@@ -3,6 +3,7 @@ package ma.ralydev.crmservice.controller;
 import ma.ralydev.crmservice.dto.CommandeDTO;
 import ma.ralydev.crmservice.service.CommandeService;
 import ma.ralydev.crmservice.client.ProductionClient;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,9 +49,9 @@ public class CommandeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CommandeDTO> deleteCommande(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCommande(@PathVariable Long id) {
         commandeService.deleteCommande(id);
-        return ResponseEntity.ok(commandeService.getCommandeById(id));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/reference/{reference}")

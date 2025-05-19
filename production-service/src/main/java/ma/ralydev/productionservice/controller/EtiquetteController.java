@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/etiquettes")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/production/etiquettes")
 public class EtiquetteController {
 
     private final EtiquetteService etiquetteService;
